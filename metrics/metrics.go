@@ -20,8 +20,8 @@ func Log(source string, frequency time.Duration) {
 	for _ = range time.Tick(frequency) {
 		logMetric(source, "NumGoroutine", "gauge", uint64(runtime.NumGoroutine()))
 
-		runtime.ReadMemStats(&memStats)
 		var memStats runtime.MemStats
+		runtime.ReadMemStats(&memStats)
 		logMetric(source, "Alloc", "gauge", memStats.Alloc)
 		logMetric(source, "HeapAlloc", "gauge", memStats.HeapAlloc)
 		logMetric(source, "NumGC", "counter", uint64(memStats.NumGC))
