@@ -19,9 +19,9 @@ func logMetric(source, metricName, metricType string, value uint64) {
 func Log(source string, frequency time.Duration) {
 	for {
 		var memStats runtime.MemStats
-                logMetric(source, "NumGoroutine", "gauge", uint64(runtime.NumGoroutine()))
+		logMetric(source, "NumGoroutine", "gauge", uint64(runtime.NumGoroutine()))
 		runtime.ReadMemStats(&memStats)
-                logMetric(source, "Alloc", "gauge", memStats.Alloc)
+		logMetric(source, "Alloc", "gauge", memStats.Alloc)
 		logMetric(source, "HeapAlloc", "gauge", memStats.HeapAlloc)
 		logMetric(source, "NumGC", "counter", uint64(memStats.NumGC))
 		logMetric(source, "PauseTotalMs", "counter", memStats.PauseTotalNs/1000000)
