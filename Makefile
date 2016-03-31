@@ -1,34 +1,12 @@
+include golang.mk
+.DEFAULT_GOAL := test # override default goal set in library makefile
+
+.PHONY: test $(PKGS)
 SHELL := /bin/bash
-PKGS := \
-github.com/Clever/go-process-metrics/metrics
-
-GOLINT := $(GOPATH)/bin/golint
-
-.PHONY: test
-
-all: build
-
-clean:
-	rm bin/*
+PKGS = $(shell go list ./...)
+$(eval $(call golang-version-check,1.5))
 
 test: $(PKGS)
-
-$(GOLINT):
-	@go get github.com/golang/lint/golint
-
-$(PKGS): $(GOLINT) $(GODEP)
-	$(GODEP) go install $@
-	@gofmt -w=true $(GOPATH)/src/$@/*.go
-	@echo "LINTING..."
-	$(GOPATH)/bin/golint $(GOPATH)/src/$@/*.go
-	@echo "VETTING..."
-	go vet $(GOPATH)/src/$@/*.go
-	@echo ""
-ifeq ($(COVERAGE),1)
-	go test -cover -coverprofile=$(GOPATH)/src/$@/c.out $@ -test.v
-	go tool cover -html=$(GOPATH)/src/$@/c.out
-else
-	@echo "TESTING..."
-	go test $@ -test.v
-	@echo ""
-endif
+$(PKGS): golang-test-all-strict-deps
+	@go get -d -t $@
+	$(call golang-test-all-strict,$@)
