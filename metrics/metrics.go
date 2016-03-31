@@ -5,12 +5,15 @@ import (
 	"runtime"
 	"time"
 
-	"gopkg.in/Clever/kayvee-go.v2"
+	"gopkg.in/Clever/kayvee-go.v3"
+	"gopkg.in/Clever/kayvee-go.v3/logger"
 )
 
 func logMetric(source, metricName, metricType string, value uint64) {
-	payload := map[string]interface{}{"type": metricType, "value": value}
-	log.Printf(kayvee.FormatLog(source, kayvee.Info, metricName, payload))
+	log.Printf(kayvee.FormatLog(source, kayvee.Info, metricName, logger.M{
+		"type":  metricType,
+		"value": value,
+	}))
 }
 
 // Log records Golang process metrics such as HeapAlloc, NumGC, etc... every
