@@ -25,7 +25,7 @@ func getSocketCount() uint64 {
 	hasLogged := false
 	for _, fd := range fds {
 		sl, err := os.Readlink(fmt.Sprintf("%s/%s", base, fd.Name()))
-		if err != nil {
+		if err != nil && !strings.HasSuffix(err.Error(), "no such file or directory") {
 			if !hasLogged {
 				lg.ErrorD("failed-readlink", logger.M{"err": err.Error()})
 				hasLogged = true
