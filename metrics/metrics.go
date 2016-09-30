@@ -29,5 +29,7 @@ func Log(source string, frequency time.Duration) {
 		logMetric(source, "HeapAlloc", "gauge", memStats.HeapAlloc)
 		logMetric(source, "NumGC", "counter", uint64(memStats.NumGC))
 		logMetric(source, "PauseTotalMs", "counter", memStats.PauseTotalNs/1000000)
+		logMetric(source, "NumConns", "gauge", getSocketCount())
+		logMetric(source, "NumFDs", "gauge", getFDCount())
 	}
 }
