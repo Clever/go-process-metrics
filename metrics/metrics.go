@@ -5,14 +5,15 @@ import (
 	"runtime"
 	"time"
 
-	"gopkg.in/Clever/kayvee-go.v3"
-	"gopkg.in/Clever/kayvee-go.v3/logger"
+	"gopkg.in/Clever/kayvee-go.v6"
+	"gopkg.in/Clever/kayvee-go.v6/logger"
 )
 
 func logMetric(source, metricName, metricType string, value uint64) {
 	log.Printf(kayvee.FormatLog(source, kayvee.Info, metricName, logger.M{
 		"type":  metricType,
 		"value": value,
+		"via":   "process-metrics",
 	}))
 }
 
