@@ -6,10 +6,12 @@ import (
 	"os"
 	"strings"
 
-	"gopkg.in/Clever/kayvee-go.v3/logger"
+	"gopkg.in/Clever/kayvee-go.v6/logger"
 )
 
-var lg = logger.New("go-process-metrics")
+var (
+	lg = logger.New("go-process-metrics")
+)
 
 // getSocketCount returns the number of open sockets
 func getSocketCount() uint64 {
