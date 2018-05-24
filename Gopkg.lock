@@ -22,8 +22,8 @@
 [[projects]]
   name = "gopkg.in/Clever/kayvee-go.v6"
   packages = [".","logger","router"]
-  revision = "e1e6fd8184162847c1123645e7058347a2fd3959"
-  version = "v6.10.0"
+  revision = "77f05943b48b0cb82c705ec9e40bed66e7cf79c1"
+  version = "v6.12.0"
 
 [[projects]]
   branch = "v2"
@@ -34,6 +34,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "ba619e2ab3c4f2d06b6917817be42d23c1e76188422011c4858d3cbc4b937c4d"
+  inputs-digest = "ceef1809d79b351c423bd688893405ae93bba0c56f226a6d0e21011c1f3ac90a"
   solver-name = "gps-cdcl"
   solver-version = 1

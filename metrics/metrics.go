@@ -2,25 +2,29 @@ package metrics
 
 import (
 	"fmt"
-	"log"
 	"runtime"
 	"runtime/debug"
 	"time"
 
-	"gopkg.in/Clever/kayvee-go.v6"
 	"gopkg.in/Clever/kayvee-go.v6/logger"
+)
+
+const (
+	numPauseQuantiles = 5
 )
 
 // Log records Golang process metrics such as HeapAlloc, NumGC, etc... every
 // frequency time period. This function never returns so it should be called from
 // a Goroutine.
 func Log(source string, frequency time.Duration) {
+	lg := logger.New("go-process-metrics")
+
 	logMetric := func(metricName, metricType string, value uint64) {
-		log.Printf(kayvee.FormatLog(source, kayvee.Info, metricName, logger.M{
+		lg.TraceD(metricName, logger.M{
 			"type":  metricType,
 			"value": value,
 			"via":   "process-metrics",
-		}))
+		})
 	}
 
 	for range time.Tick(frequency) {
@@ -31,7 +35,7 @@ func Log(source string, frequency time.Duration) {
 		runtime.ReadMemStats(&memStats)
 		gcStats := &debug.GCStats{
 			// allocate 5 slots for 0,25,50,75,100th percentiles
-			PauseQuantiles: make([]time.Duration, 5),
+			PauseQuantiles: make([]time.Duration, numPauseQuantiles),
 		}
 		debug.ReadGCStats(gcStats)
 		duration := time.Now().Sub(start)
@@ -56,11 +60,10 @@ func Log(source string, frequency time.Duration) {
 		// log various GC stats
 		logMetric("NumGC", "counter", uint64(gcStats.NumGC))
 		// log the min, 25th, 50th, 75th and max GC pause percentiles
-		for percent := 0.0; percent <= 1.0; percent += 0.25 {
-			logMetric(
-				fmt.Sprintf("GCPauseNs-%d", int(percent*100)),
-				"guage",
-				uint64(gcStats.PauseQuantiles[int(percent*4.0)].Nanoseconds()))
+		for idx := 0; idx < numPauseQuantiles; idx++ {
+			percent := idx * 25
+			title := fmt.Sprintf("GCPauseNs-%d", percent)
+			logMetric(title, "guage", uint64(gcStats.PauseQuantiles[idx].Nanoseconds()))
 		}
 	}
 }
