@@ -63,7 +63,7 @@ func Log(source string, frequency time.Duration) {
 		for idx := 0; idx < numPauseQuantiles; idx++ {
 			percent := idx * 25
 			title := fmt.Sprintf("GCPauseNs-%d", percent)
-			logMetric(title, "guage", uint64(gcStats.PauseQuantiles[idx].Nanoseconds()))
+			logMetric(title, "gauge", uint64(gcStats.PauseQuantiles[idx].Nanoseconds()))
 		}
 	}
 }
