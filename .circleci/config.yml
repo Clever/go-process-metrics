@@ -26,7 +26,7 @@ jobs:
     - clone-ci-scripts
     - run: make install_deps
     - run: make test
-    - run: if [ "${CIRCLE_BRANCH}" == "master" ]; then $HOME/ci-scripts/circleci/github-release $GH_RELEASE_TOKEN; fi;
+    - run: if [ "${CIRCLE_BRANCH}" == "master" ]; then ../ci-scripts/circleci/github-release $GH_RELEASE_TOKEN; fi;
     - persist_to_workspace:
         root: ~/go/src/github.com/Clever
         paths: "."
