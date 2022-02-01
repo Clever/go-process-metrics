@@ -6,7 +6,7 @@ import (
 	"runtime/debug"
 	"time"
 
-	"gopkg.in/Clever/kayvee-go.v6/logger"
+	"github.com/Clever/kayvee-go/v7/logger"
 )
 
 const (
