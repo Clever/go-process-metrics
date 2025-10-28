@@ -4,7 +4,7 @@ executors:
   common-executor:
     working_directory: ~/go/src/github.com/Clever/go-process-metrics
     docker:
-    - image: cimg/go:1.24
+      - image: cimg/go:1.24
     environment:
       CIRCLE_ARTIFACTS: /tmp/circleci-artifacts
       CIRCLE_TEST_REPORTS: /tmp/circleci-test-results
@@ -14,19 +14,20 @@ commands:
   clone-ci-scripts:
     description: Clone the ci-scripts repo
     steps:
-    - run:
-        command: cd .. && git clone --depth 1 -v https://github.com/Clever/ci-scripts.git && cd ci-scripts && git show --oneline -s
-        name: Clone ci-scripts
+      - run:
+          command: cd .. && git clone --depth 1 -v https://github.com/Clever/ci-scripts.git && cd ci-scripts && git show --oneline -s
+          name: Clone ci-scripts
 
 jobs:
   build:
     executor: common-executor
     steps:
-    - checkout
-    - clone-ci-scripts
-    - run: make install_deps
-    - run: make test
-    - run: if [ "${CIRCLE_BRANCH}" == "master" ]; then ../ci-scripts/circleci/github-release $GH_RELEASE_TOKEN; fi;
-    - persist_to_workspace:
-        root: ~/go/src/github.com/Clever
-        paths: "."
+      - checkout
+      - clone-ci-scripts
+      - run: make install_deps
+      - run: make test
+      - run: if [ "${CIRCLE_BRANCH}" == "master" ]; then ../ci-scripts/circleci/github-release $GH_RELEASE_TOKEN; fi;
+      - persist_to_workspace:
+          root: ~/go/src/github.com/Clever
+          paths: "."
+      - run: ../ci-scripts/circleci/catalog-sync $CATAPULT_URL $CATAPULT_USER $CATAPULT_PASS go-process-metrics utility
